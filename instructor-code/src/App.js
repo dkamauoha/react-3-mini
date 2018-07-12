@@ -9,7 +9,6 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const baseUrl = 'http://joes-autos.herokuapp.com/api';
 
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -35,43 +34,39 @@ class App extends Component {
   getVehicles() {
     // axios (GET)
     // setState with response -> vehiclesToDisplay
-    axios.get(baseUrl + '/vehicles').then(results => {
-      toast.success('Successfully got vehicles!')
-      this.setState({vehiclesToDisplay: results.data})
-    }).catch(() => toast.error('Failed at fetching vehicles'));  
+    let promise = axios.get(baseUrl + '/vehicles')
+
+    promise.then((result) => {
+      this.setState({
+        vehiclesToDisplay: result.data
+      })
+    })
   }
 
   getPotentialBuyers() {
     // axios (GET)
     // setState with response -> buyersToDisplay
-    axios.get(baseUrl + `/buyers`).then(results => {
-      toast.success('Successfully got Potential Buyers');
-      this.setState({buyersToDisplay: results.data});
-    }).catch(() => toast.error('Failed to get Potential Buyers'))
   }
 
   sellCar(id) {
     // axios (DELETE)
     // setState with response -> vehiclesToDisplay
 
-    axios.delete(baseUrl + `/vehicles/${id}`)
-      .then(response => {
-        toast.success('Sold Car!')
-        this.setState({vehiclesToDisplay: response.data.vehicles});
-      }).catch(() => toast.error('Failed to sell car.'))
+    axios.delete(baseUrl + `/vehicles/${id}`).then(response => {
+      this.setState({vehiclesToDisplay: response.data});
+    })
   }
-
   filterByMake() {
     let make = this.selectedMake.value;
 
     // axios (GET)
     // setState with response -> vehiclesToDisplay
     axios.get(baseUrl + '/vehicles?make=' + make)
-          .then(response => {
-            this.setState({
-              vehiclesToDisplay: response.data
-            })
-          })
+      .then(response => {
+        this.setState({
+          vehiclesToDisplay: response.data
+        })
+      })
   }
 
   filterByColor() {
@@ -79,18 +74,17 @@ class App extends Component {
 
     // axios (GET)
     // setState with response -> vehiclesToDisplay
-    axios.get(baseUrl + `/vehicles?color=${color}`).then(response => {
-      this.setState({vehiclesToDisplay: response.data});
-    })
   }
 
   updatePrice(priceChange, id) {
     // axios (PUT)
     // setState with response -> vehiclesToDisplay
-    axios.put(baseUrl + `/vehicles/${id}/${priceChange}`).then(results => {
-      toast.success('Successfully changed price!')
-      this.setState({vehiclesToDisplay: results.data.vehicles})
-    }).catch(() => toast.error('Failed to change price'))
+    axios.put(baseUrl + `/vehicles/${id}/${priceChange}`)
+      .then((response) => {
+        this.setState({
+          vehiclesToDisplay: response.data.vehicles
+        })
+      })
   }
 
   addCar() {
@@ -104,10 +98,13 @@ class App extends Component {
 
     // axios (POST)
     // setState with response -> vehiclesToDisplay
-    axios.post(baseUrl + '/vehicles', newCar).then(results => {
-      toast.success('Successfully added the New Car!')
-      this.setState({vehiclesToDisplay: results.data.vehicles});
-    }).catch(() => toast.error('Failed to add the New Car.'))
+    let promise = axios.post(baseUrl + '/vehicles', newCar)
+
+    promise.then((response) => {
+      this.setState({
+        vehiclesToDisplay: response.data.vehicles
+      })
+    })
   }
 
   addBuyer() {
@@ -119,20 +116,11 @@ class App extends Component {
 
     //axios (POST)
     // setState with response -> buyersToDisplay
-
-    axios.post(baseUrl + `/buyers`, newBuyer).then(response => {
-      toast.success('Successfully added New Buyer');
-      this.setState({buyersToDisplay: response.data.buyers});
-    }).catch(() => toast.error('Failed to add buyer.'))
   }
 
   deleteBuyer(id) {
     // axios (DELETE)
     //setState with response -> buyersToDisplay
-    axios.delete(baseUrl + `/buyers/${id}`).then(response => {
-      toast.success('Successfully removed potential buyer!')
-      this.setState({buyersToDisplay: response.data.buyers});
-    }).catch(() => toast.error('Failed to remove potential buyer'));
   }
 
   nameSearch() {
@@ -140,9 +128,6 @@ class App extends Component {
 
     // axios (GET)
     // setState with response -> buyersToDisplay
-    axios.get(baseUrl + `/buyers?name=${searchLetters}`).then(response => {
-      this.setState({buyersToDisplay: response.data});
-    })
   }
 
   byYear() {
@@ -150,9 +135,6 @@ class App extends Component {
 
     // axios (GET)
     // setState with response -> vehiclesToDisplay
-    axios.get(baseUrl + `/vehicles?year=${year}`).then(response => {
-      this.setState({vehiclesToDisplay: response.data})
-    })
   }
 
   // Do not edit the code below
